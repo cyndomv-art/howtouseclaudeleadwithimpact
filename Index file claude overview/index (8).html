@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Use Claude — Lead with Impact</title>
+<style>
+  
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #0F2D52;
+    --navy-light: #1A3D6E;
+    --teal: #1A8A82;
+    --teal-light: #22AFA5;
+    --amber: #D4890A;
+    --amber-light: #F5A623;
+    --cream: #F7F3ED;
+    --cream-dark: #EDE8DF;
+    --white: #FFFFFF;
+    --text-dark: #0F2D52;
+    --text-mid: #2C4A6E;
+    --text-light: #5A7A9A;
+    --border: #C8D8E8;
+    --row-alt: #F0F5FA;
+  }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    width: 850px;
+    margin: 0 auto;
+  }
+
+  .page {
+    background: var(--white);
+    padding: 0;
+    min-height: 1100px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    padding: 18px 40px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-left h1 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .header-left h1 span {
+    font-weight: 700;
+    color: var(--amber-light);
+  }
+
+  .header-left .subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--teal-light);
+    margin-top: 4px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .logo-text {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--amber-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* COLUMN LABELS */
+  .col-labels {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr;
+    background: var(--navy-light);
+    padding: 5px 0;
+  }
+
+  .col-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    padding: 0 16px;
+  }
+
+  .col-label.center { text-align: center; }
+
+  /* ROWS */
+  .feature-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    min-height: 96px;
+  }
+
+  .feature-row:nth-child(even) { background: var(--row-alt); }
+  .feature-row:nth-child(odd) { background: var(--white); }
+
+  /* SECURITY ROW special */
+  .feature-row.security-row {
+    background: #FFF8ED;
+    border-left: 4px solid var(--amber);
+  }
+
+  /* LEFT LABEL CELL */
+  .feature-label {
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 10px;
+    text-align: center;
+    gap: 4px;
+  }
+
+  .feature-row:nth-child(even) .feature-label { background: var(--navy-light); }
+  .security-row .feature-label { background: var(--amber) !important; }
+
+  .feature-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  .feature-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.3px;
+  }
+
+  /* MIDDLE CELL — what + prompt */
+  .feature-main {
+    padding: 10px 14px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .what-it-does {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-mid);
+    line-height: 1.35;
+  }
+
+  .prompt-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-top: 1px;
+  }
+
+  .prompt-text {
+    font-size: 10.5px;
+    font-style: italic;
+    color: var(--text-dark);
+    background: var(--cream);
+    border-left: 3px solid var(--teal);
+    padding: 4px 8px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.35;
+  }
+
+  .security-row .prompt-text {
+    border-left-color: var(--amber);
+    background: #FFF3D6;
+  }
+
+  /* RIGHT CELL — tip + watch out */
+  .feature-tips {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .tip-block { display: flex; flex-direction: column; gap: 3px; }
+
+  .tip-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  .tip-label.warning { color: var(--amber); }
+
+  .tip-text {
+    font-size: 10.5px;
+    color: var(--text-mid);
+    line-height: 1.35;
+  }
+
+  .tip-text.warning-text {
+    color: #7A4F00;
+  }
+
+  /* DIVIDER between tip and warning */
+  .tip-divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 1px 0;
+  }
+
+  /* FOOTER TAGLINE */
+  .tagline-bar {
+    background: var(--teal);
+    padding: 8px 40px;
+    text-align: center;
+  }
+
+  .tagline-bar p {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--white);
+    opacity: 0.95;
+    letter-spacing: 0.3px;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.3px;
+  }
+
+  .footer-center {
+    font-size: 11px;
+    color: var(--amber-light);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .footer-right {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    text-align: right;
+  }
+
+  /* CTA STRIP */
+  .cta-strip {
+    background: var(--cream-dark);
+    border-top: 2px solid var(--amber-light);
+    padding: 7px 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .cta-step {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .cta-arrow {
+    color: var(--amber);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .cta-step .num {
+    background: var(--navy);
+    color: var(--white);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  @media print {
+    body { width: 100%; }
+    .page { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1>How to Use <span>Claude</span></h1>
+      <div class="subtitle">A Practical Guide for Professionals</div>
+    </div>
+    <div class="header-right">
+      <div class="logo-text">Lead with Impact</div>
+      <div class="logo-sub">leadwithimpact.io</div>
+    </div>
+  </div>
+
+  <!-- COLUMN LABELS -->
+  <div class="col-labels">
+    <div class="col-label">Feature</div>
+    <div class="col-label">What It Does &amp; Try This First</div>
+    <div class="col-label">Pro Tip &nbsp;|&nbsp; Watch Out For</div>
+  </div>
+
+  <!-- ROW 1: CHAT -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">💬</div>
+      <div class="feature-name">Chat</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Where everyone starts. Where most people stop. Do not stop here — Chat is the on-ramp, not the destination.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Rewrite this email to sound confident and professional — clear, not cold."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Turn on Extended Thinking and Web Search before you start. Two clicks. Completely different results.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Re-explaining who you are every single session. Set up a Project once and never do it again.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: PROJECTS -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">📁</div>
+      <div class="feature-name">Projects</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Your persistent workspace. Drop in your files, your role, your goals — Claude remembers so you do not have to repeat yourself.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Create a 'Workshop Facilitation' project. Upload your bio, audience profile, and past session notes. Every output will sound like you."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">One Project per client, initiative, or topic. Focused context produces sharper, more relevant outputs every time.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Dumping every file you have into one Project. Five well-chosen documents beat fifty scattered ones.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: COWORK -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-name">Cowork</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Claude stops answering and starts doing. Describe the outcome, step away, come back to finished work — real files, in your folder.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Here is a folder of notes from my last three sessions. Organize them into a summary report with key themes and action items."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Set Global Instructions once — your name, your role, your preferred format. Every Cowork session starts already informed.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Giving Claude a folder with no context. Tell it the goal before it starts — it plans better when it knows the destination.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 4: CODE -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">💻</div>
+      <div class="feature-name">Code</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">The developer powerhouse — and the engine Cowork is built on. Claude writes, debugs, and ships code directly. If you do not code, know it exists. If your team builds tools, share this with them.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Ask your agency's developers if they are using Claude Code. If they are not, this is your conversation starter."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Understanding Code explains why Cowork is so capable. Same engine, friendlier interface. Knowing the connection makes you a smarter AI leader.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Assuming Code is not relevant to you. If your organization builds or maintains any internal tools, someone on your team needs to know this exists.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 5: SKILLS -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-name">Skills</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Your personal Claude playbook. Build it once, use it forever. Claude learns your standards — not just your preferences.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Think of one task you do every week. Write down exactly how you want it done. That is your first Skill."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Build a Skill for every task you repeat weekly — workshop outlines, executive summaries, email formats. One good Skill replaces an entire SOP.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Confusing Skills with Projects. Projects hold your context. Skills teach Claude your process. You need both.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 6: CONNECTORS -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">🔗</div>
+      <div class="feature-name">Connectors</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Claude inside the tools you already use. Google Drive, Slack, Notion, and 50+ more. Free to connect. No switching tabs.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Find my most recent workshop outline in Google Drive and pull the key talking points."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Connectors work across Chat, Projects, and Cowork. Connect once — Claude searches on demand across all three surfaces.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Thinking Connectors sync automatically. Claude searches your tools when you ask — not continuously in the background.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 7: PLUGINS -->
+  <div class="feature-row">
+    <div class="feature-label">
+      <div class="feature-icon">🔌</div>
+      <div class="feature-name">Plugins</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Pre-built power-ups for your role. Install one and Claude shows up as a specialist — ready with the right commands for how you work.</div>
+      <div class="prompt-label">Try this first</div>
+      <div class="prompt-text">"Install a plugin for your field. Type / in any chat to see every command available."</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Start with two plugins that match your actual job. Focused context outperforms having everything installed at once.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Installing every plugin at once. Claude performs best with focused, relevant context — not everything at the same time.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 8: SECURITY -->
+  <div class="feature-row security-row">
+    <div class="feature-label">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-name">Security First</div>
+    </div>
+    <div class="feature-main">
+      <div class="what-it-does">Before anything else — know what never goes in. AI tools are powerful. Protecting sensitive information is non-negotiable.</div>
+      <div class="prompt-label">The rule</div>
+      <div class="prompt-text">"Would I post this publicly?" If no — do not put it in AI. Use hypothetical scenarios and anonymized examples instead.</div>
+    </div>
+    <div class="feature-tips">
+      <div class="tip-block">
+        <div class="tip-label">Pro tip</div>
+        <div class="tip-text">Never input PII, personnel records, case numbers, or anything marked sensitive — even in a "private" chat. Use fictional stand-ins always.</div>
+      </div>
+      <hr class="tip-divider">
+      <div class="tip-block">
+        <div class="tip-label warning">Watch out for</div>
+        <div class="tip-text warning-text">Assuming "private" means protected. Default to caution. Your judgment is the last line of defense — not the platform.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAGLINE -->
+  <div class="tagline-bar">
+    <p>"AI amplifies what already exists. My job is to make sure what exists is worth amplifying."</p>
+  </div>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <div class="cta-step"><div class="num">1</div> Download the desktop app at claude.com/download</div>
+    <div class="cta-arrow">→</div>
+    <div class="cta-step"><div class="num">2</div> Get Pro ($20/mo)</div>
+    <div class="cta-arrow">→</div>
+    <div class="cta-step"><div class="num">3</div> Open Cowork</div>
+    <div class="cta-arrow">→</div>
+    <div class="cta-step"><div class="num">4</div> Pick a folder and go</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">© 2026 Lead with Impact. All rights reserved.</div>
+    <div class="footer-center">leadwithimpact.io &nbsp;|&nbsp; cynthia@leadwithimpact.io</div>
+    <div class="footer-right">Cynthia Vazquez<br>Certified AI Instructor</div>
+  </div>
+
+</div>
+</body>
+</html>
